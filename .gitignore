@@ -13,3 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+venv/
+.venv/
+__pycache__/
+.ipynb_checkpoints/

@@ -1,0 +1,132 @@
+[
+    {
+        "title":"Web Summit Rio 2026",
+        "date":"2026-04-27",
+        "time":"09:00",
+        "location":"Rio de Janeiro, RJ",
+        "is_online":false,
+        "tags":[
+            "inovação",
+            "startups",
+            "tecnologia",
+            "networking",
+            "negócios"
+        ],
+        "image_url":"https:\/\/images.unsplash.com\/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80",
+        "id":"c537aaf6-a11c-48bb-baef-651367f59671"
+    },
+    {
+        "title":"Google I\/O 2026",
+        "date":"2026-05-12",
+        "time":"14:00",
+        "location":"Remoto",
+        "is_online":true,
+        "tags":[
+            "android",
+            "kotlin",
+            "ai",
+            "gemini",
+            "firebase",
+            "web"
+        ],
+        "image_url":"https:\/\/images.unsplash.com\/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=600&q=80",
+        "id":"5e72bd45-b31b-4897-974b-560e73750a7b"
+    },
+    {
+        "title":"Apple WWDC 2026",
+        "date":"2026-06-08",
+        "time":"14:00",
+        "location":"Remoto",
+        "is_online":true,
+        "tags":[
+            "ios",
+            "swift",
+            "machine learning",
+            "mobile",
+            "design"
+        ],
+        "image_url":"https:\/\/images.unsplash.com\/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=80",
+        "id":"063d7d42-5bc1-4e13-ae77-1954d5a3cf6a"
+    },
+    {
+        "title":"TDC (The Developer's Conference) SP",
+        "date":"2026-07-21",
+        "time":"08:30",
+        "location":"São Paulo, SP",
+        "is_online":false,
+        "tags":[
+            "java",
+            "python",
+            "agile",
+            "arquitetura",
+            "dados",
+            "backend"
+        ],
+        "image_url":"https:\/\/images.unsplash.com\/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=600&q=80",
+        "id":"c6ff7621-c437-443a-82be-f87d2037fca3"
+    },
+    {
+        "title":"Python Brasil 2026",
+        "date":"2026-10-15",
+        "time":"09:00",
+        "location":"Manaus, AM",
+        "is_online":false,
+        "tags":[
+            "python",
+            "data science",
+            "comunidade",
+            "django",
+            "machine learning"
+        ],
+        "image_url":"https:\/\/images.unsplash.com\/photo-1526379095098-d400fd0bfce8?auto=format&fit=crop&w=600&q=80",
+        "id":"8a192bbc-671f-4c1c-9232-3913a0ff4959"
+    },
+    {
+        "title":"AWS re:Invent 2026 Recap BR",
+        "date":"2026-12-10",
+        "time":"18:00",
+        "location":"São Paulo, SP",
+        "is_online":false,
+        "tags":[
+            "cloud",
+            "aws",
+            "devops",
+            "infraestrutura",
+            "segurança"
+        ],
+        "image_url":"https:\/\/images.unsplash.com\/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=600&q=80",
+        "id":"674bc047-fefc-4738-b74d-7070fac70b3e"
+    },
+    {
+        "title":"Data Science e IA Summit",
+        "date":"2026-08-05",
+        "time":"10:00",
+        "location":"Remoto",
+        "is_online":true,
+        "tags":[
+            "data science",
+            "machine learning",
+            "pandas",
+            "llm",
+            "ai"
+        ],
+        "image_url":"https:\/\/images.unsplash.com\/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80",
+        "id":"6e1ac037-aad1-4e0d-8b4c-90bb064fb074"
+    },
+    {
+        "title":"Front-End Week",
+        "date":"2026-09-20",
+        "time":"19:00",
+        "location":"Remoto",
+        "is_online":true,
+        "tags":[
+            "react",
+            "javascript",
+            "css",
+            "typescript",
+            "ux"
+        ],
+        "image_url":"https:\/\/images.unsplash.com\/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=600&q=80",
+        "id":"e8a10ef3-ef78-4224-a126-58d112559932"
+    }
+]
