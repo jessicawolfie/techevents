@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
+
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
@@ -30,11 +32,8 @@ android {
         }
     }
     buildFeatures {
-        dataBinding = false
+        dataBinding = true
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1" // Versão compatível com a maioria das libs atuais
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
