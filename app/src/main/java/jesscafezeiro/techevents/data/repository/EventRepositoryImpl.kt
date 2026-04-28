@@ -8,11 +8,11 @@ import jesscafezeiro.techevents.domain.model.repository.EventRepository
 class EventRepositoryImpl(
     private val eventApiService: EventApiService
 ) : EventRepository {
-    
-    override suspend fun getEvents(query: String): List<Event> {
-        // Extração: vai na API e busca a lista de DTOs
-        val dtoList = eventApiService.getEvents()
-        
+
+    override suspend fun getEvents(query: String, tipo: String?): List<Event> {
+        // Extração: vai na API e busca a lista de DTOs, passando o nosso novo filtro
+        val dtoList = eventApiService.getEvents(tipo = tipo)
+
         // Transformação: DTO -> Domain (garantindo que a UI não dependa da estrutura da API)
         return dtoList.map { it.toDomain() }
     }
