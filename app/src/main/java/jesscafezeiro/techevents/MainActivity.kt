@@ -56,6 +56,7 @@ class MainActivity : ComponentActivity() {
                                 value = searchQuery,
                                 onValueChange = { novotexto -> viewModel.onSearchQueryChanged(novotexto)},
                                 label = { Text("Buscar eventos...")},
+                                singleLine = true,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(16.dp)

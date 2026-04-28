@@ -10,11 +10,19 @@ class EventRepositoryImpl(
 ) : EventRepository {
 
     override suspend fun getEvents(query: String, tipo: String?): List<Event> {
-        // Extração: vai na API e busca a lista de DTOs, passando o nosso novo filtro
+        // Extração: vai na API e busca a lista de DTOs, passando o nosso filtro de categoria (online/presencial)
         val dtoList = eventApiService.getEvents(tipo = tipo)
 
         // Transformação: DTO -> Domain (garantindo que a UI não dependa da estrutura da API)
-        return dtoList.map { it.toDomain() }
+        var domainList = dtoList.map { it.toDomain() }
+
+        if (query.isNotBlank()) {
+            domainList = domainList.filter { evento ->
+                evento.title.contains(query, ignoreCase = true)
+            }
+        }
+
+        return domainList
     }
 
     override suspend fun getEvent(id: String): Event? {

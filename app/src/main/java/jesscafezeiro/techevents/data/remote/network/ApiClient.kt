@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
-    const val BASE_URL = "http://192.168.5.145:8000/"
+    private const val BASE_URL = "https://techevents-api.onrender.com/"
     
     // O interceptor: vai imprimir no logcat do android studio o JSON exato da API
     private val loggingInterceptor = HttpLoggingInterceptor().apply { 

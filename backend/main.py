@@ -14,10 +14,7 @@ with open("events_dataset.json", "r", encoding="utf-8") as f:
         lista_de_eventos = dados.get("allEvents", [])
 
 @app.get("/events")
-def get_events(tipo: Optional[str] = None):
-    print(f"\n--- NOVA REQUISIÇÃO ---")
-    print(f"O Android pediu o tipo: '{tipo}'")
-    
+def get_events(tipo: Optional[str] = None):    
     if tipo is None:
         return lista_de_eventos 
     
@@ -39,5 +36,4 @@ def get_events(tipo: Optional[str] = None):
         elif tipo.strip().lower() == "presencial" and not eh_online:
             eventos_filtrados.append(event)
             
-    print(f"Filtro aplicado! Devolvendo {len(eventos_filtrados)} eventos.")
     return eventos_filtrados
