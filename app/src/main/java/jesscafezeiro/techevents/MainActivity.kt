@@ -48,6 +48,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         val uiState by viewModel.uiState.collectAsState()
                         val searchQuery by viewModel.searchQuery.collectAsState()
+                        val selectedType by viewModel.selectedType.collectAsState()
                         
                         Column(modifier = Modifier.fillMaxSize()) {
                             // Barra de busca
@@ -75,7 +76,11 @@ class MainActivity : ComponentActivity() {
                                         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                                     }
                                     is UiState.Success -> {
-                                        EventListScreen(events = state.data.allEvents)
+                                        EventListScreen(
+                                            events = state.data.allEvents,
+                                            selectedType = selectedType,
+                                            onTypeSelected = { novoTipo -> viewModel.onTypeSelected(novoTipo)}
+                                        )
                                     }
                                     is UiState.Error -> {
                                         Text(
