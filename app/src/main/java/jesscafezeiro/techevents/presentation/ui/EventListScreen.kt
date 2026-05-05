@@ -68,7 +68,14 @@ fun EventListScreen(
             ) {
                 items(
                     count = pagingItems.itemCount,
-                    key = pagingItems.itemKey { it.id },
+                    key = { index ->
+                        val event = pagingItems.peek(index)
+                        if (event != null) {
+                            "${event.id}_$index"
+                        } else {
+                            "placeholder_$index"
+                        }
+                    },
                     contentType = pagingItems.itemContentType { "events" }
                 ) { index ->
                     val evento = pagingItems[index]
