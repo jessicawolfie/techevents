@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
 
     id("org.jetbrains.kotlin.plugin.compose")
+    kotlin("plugin.serialization") version "1.9.0"
 }
 
 android {
@@ -76,4 +77,11 @@ dependencies {
     val paging_version = "3.3.0"
     implementation("androidx.paging:paging-runtime:$paging_version")
     implementation("androidx.paging:paging-compose:$paging_version")
+
+    // Navigation Compose
+    val nav_version = "2.8.0" // Versão mínima que suporta Type-safe
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    // KotlinX Serialization (Motor necessário para empacotar as rotas Type-safe)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 }

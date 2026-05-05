@@ -1,5 +1,6 @@
 package jesscafezeiro.techevents.presentation.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -18,7 +19,6 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
-import androidx.paging.compose.itemKey
 import jesscafezeiro.techevents.domain.model.Event
 import kotlinx.coroutines.flow.Flow
 
@@ -26,7 +26,8 @@ import kotlinx.coroutines.flow.Flow
 fun EventListScreen(
     eventsFlow: Flow<PagingData<Event>>,
     selectedType: String?,
-    onTypeSelected: (String?) -> Unit
+    onTypeSelected: (String?) -> Unit,
+    onEventClick: (String) -> Unit = {}
 ) {
     val pagingItems = eventsFlow.collectAsLazyPagingItems()
 
@@ -36,31 +37,13 @@ fun EventListScreen(
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            item {
-                FilterChip(
-                    text = "Todos",
-                    isSelected = selectedType == null,
-                    onClick = { onTypeSelected(null) }
-                )
-            }
-            item {
-                FilterChip(
-                    text = "Online",
-                    isSelected = selectedType == "online",
-                    onClick = { onTypeSelected("online") }
-                )
-            }
-            item {
-                FilterChip(
-                    text = "Presencial",
-                    isSelected = selectedType == "presencial",
-                    onClick = { onTypeSelected("presencial") }
-                )
-            }
+            item { FilterChip(text = "Todos", isSelected = selectedType == null, onClick = { onTypeSelected(null) }) }
+            item { FilterChip(text = "Online", isSelected = selectedType == "online", onClick = { onTypeSelected("online") }) }
+            item { FilterChip(text = "Presencial", isSelected = selectedType == "presencial", onClick = { onTypeSelected("presencial") }) }
         }
 
         // Lista de Eventos (Vertical)
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier.weight(1f)) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(bottom = 16.dp),
@@ -80,7 +63,10 @@ fun EventListScreen(
                 ) { index ->
                     val evento = pagingItems[index]
                     if (evento != null) {
-                        EventCard(event = evento)
+                        EventCard(
+                            event = evento,
+                            onClick = { onEventClick(evento.id) }
+                        )
                     }
                 }
 
@@ -88,10 +74,7 @@ fun EventListScreen(
                 if (pagingItems.loadState.append is LoadState.Loading) {
                     item {
                         CircularProgressIndicator(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                                .wrapContentWidth(Alignment.CenterHorizontally)
+                            modifier = Modifier.fillMaxWidth().padding(16.dp).wrapContentWidth(Alignment.CenterHorizontally)
                         )
                     }
                 }
@@ -99,54 +82,28 @@ fun EventListScreen(
                 // Erro ao carregar mais itens (Append)
                 if (pagingItems.loadState.append is LoadState.Error) {
                     item {
-                        Column(
-                            modifier = Modifier.fillMaxWidth().padding(16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = "Falha ao carregar mais eventos.",
-                                color = MaterialTheme.colorScheme.error
-                            )
-                            Button(onClick = { pagingItems.retry() }) {
-                                Text("Tentar novamente")
-                            }
+                        Column(modifier = Modifier.fillMaxWidth().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(text = "Falha ao carregar mais eventos.", color = MaterialTheme.colorScheme.error)
+                            Button(onClick = { pagingItems.retry() }) { Text("Tentar novamente") }
                         }
                     }
                 }
             }
-
-            // Loading Inicial (Refresh)
+            
             if (pagingItems.loadState.refresh is LoadState.Loading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
 
-            // Caso Vazio (NotLoading e itemCount == 0)
             if (pagingItems.loadState.refresh is LoadState.NotLoading && pagingItems.itemCount == 0) {
-                Text(
-                    text = "Nenhum evento encontrado",
-                    modifier = Modifier.align(Alignment.Center),
-                    color = MaterialTheme.colorScheme.onBackground
-                )
+                Text(text = "Nenhum evento encontrado", modifier = Modifier.align(Alignment.Center), color = MaterialTheme.colorScheme.onBackground)
             }
 
-            // Erro Inicial (Refresh)
             if (pagingItems.loadState.refresh is LoadState.Error) {
                 val error = pagingItems.loadState.refresh as LoadState.Error
-                Column(
-                    modifier = Modifier.align(Alignment.Center).padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "Erro ao carregar: ${error.error.localizedMessage}",
-                        color = MaterialTheme.colorScheme.error,
-                        textAlign = TextAlign.Center
-                    )
+                Column(modifier = Modifier.align(Alignment.Center).padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(text = "Erro ao carregar: ${error.error.localizedMessage}", color = MaterialTheme.colorScheme.error, textAlign = TextAlign.Center)
                     Spacer(modifier = Modifier.height(8.dp))
-                    Button(onClick = { pagingItems.retry() }) {
-                        Text("Tentar novamente")
-                    }
+                    Button(onClick = { pagingItems.retry() }) { Text("Tentar novamente") }
                 }
             }
         }
@@ -162,9 +119,8 @@ fun FilterChip(
     val backgroundColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant
     val textColor = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant
 
-    // Uso do parâmetro onClick nativo do Surface para melhor acessibilidade e ripple effect
     Surface(
-        onClick = onClick,
+        modifier = Modifier.clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         color = backgroundColor
     ) {

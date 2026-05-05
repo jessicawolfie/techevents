@@ -1,5 +1,6 @@
 package jesscafezeiro.techevents.presentation.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,14 +21,20 @@ import androidx.compose.ui.unit.sp
 import jesscafezeiro.techevents.domain.model.Event
 
 @Composable
-fun EventCard(event: Event) {
+fun EventCard(
+    event: Event,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     // Paleta de cores para o card
     val cardBackground = Color(0xFF2E3440)
     val textColor = Color(0xFFECEFF4)
     val badgeColor = Color(0xFFB48EAD)
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = cardBackground),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
