@@ -1,10 +1,10 @@
 package jesscafezeiro.techevents.domain.model.repository
 
+import androidx.paging.PagingData
 import jesscafezeiro.techevents.domain.model.Event
+import kotlinx.coroutines.flow.Flow
 
-// Contrato do Repositório de Eventos.
-// Fica na camda de domain para que a ViewModel saiba o que pode pedir, sem precisar saber comos os dados são buscados.
 interface EventRepository {
-    suspend fun getEvents(query: String = "", tipo: String? = null): List<Event>
+    fun getEvents(query: String, tipo: String?): Flow<PagingData<Event>>
     suspend fun getEvent(id: String): Event?
 }

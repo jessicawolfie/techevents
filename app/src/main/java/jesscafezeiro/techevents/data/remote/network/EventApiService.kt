@@ -6,10 +6,13 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface EventApiService {
-    // Endpoint para buscar todos os eventos com filtro opcional de tipo
+    // Endpoint para buscar todos os eventos com suporte a filtros e paginação
     @GET("events")
     suspend fun getEvents(
-        @Query("tipo") tipo: String? = null
+        @Query("query") query: String? = null,
+        @Query("tipo") tipo: String? = null,
+        @Query("page") page: Int? = null,
+        @Query("limit") limit: Int? = null
     ): List<EventDto>
 
     // Endpoint para buscar um evento específico por ID

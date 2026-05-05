@@ -71,4 +71,9 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     // OkHttp Logging
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+
+    // Paging 3
+    val paging_version = "3.3.0"
+    implementation("androidx.paging:paging-runtime:$paging_version")
+    implementation("androidx.paging:paging-compose:$paging_version")
 }

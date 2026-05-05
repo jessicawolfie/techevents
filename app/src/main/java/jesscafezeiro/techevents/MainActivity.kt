@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
         setContent { 
             MaterialTheme {
                 Scaffold(
-                    containerColor = Color(0xFF121212) 
+                    containerColor = Color(0xFF121212),
                 ) { innerPadding ->
                     Surface(
                         modifier = Modifier
@@ -78,9 +78,9 @@ class MainActivity : ComponentActivity() {
                                     }
                                     is UiState.Success -> {
                                         EventListScreen(
-                                            events = state.data.allEvents,
+                                            eventsFlow = state.data.allEvents,
                                             selectedType = selectedType,
-                                            onTypeSelected = { novoTipo -> viewModel.onTypeSelected(novoTipo)}
+                                            onTypeSelected = { novoTipo -> viewModel.onTypeSelected(novoTipo) }
                                         )
                                     }
                                     is UiState.Error -> {
