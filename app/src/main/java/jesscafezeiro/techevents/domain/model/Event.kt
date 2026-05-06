@@ -1,4 +1,5 @@
 package jesscafezeiro.techevents.domain.model
+
 data class Event (
     val id: String,
     val title: String,
@@ -7,5 +8,6 @@ data class Event (
     val location: String,
     val isOnline: Boolean,
     val tags: List<String>,
-    val imageUrl: String? = null
+    val imageUrl: String? = null,
+    val description: String = "Nenhuma descrição fornecida para este evento."
 )
