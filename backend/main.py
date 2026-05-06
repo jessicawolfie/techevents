@@ -1,3 +1,4 @@
+from http.client import HTTPException
 from typing import Optional
 from fastapi import FastAPI
 import json
@@ -37,3 +38,15 @@ def get_events(tipo: Optional[str] = None):
             eventos_filtrados.append(event)
             
     return eventos_filtrados
+
+@app.get("/events/{event_id}")
+def get_event_by_id(event_id: str):
+    # Percorre a lista de eventos carregada do JSON
+    for event in lista_de_eventos:
+        # Se o ID do evento atual for igual ao ID que o Android pediu, devolve o evento
+        if str(event.get("id")) == event_id:
+            return event
+            
+    # Se o loop terminar e não encontrar nenhum evento com esse ID, 
+    # devolve um erro 404 proativo e customizado.
+    raise HTTPException(status_code=404, detail="Evento não encontrado no banco de dados.")

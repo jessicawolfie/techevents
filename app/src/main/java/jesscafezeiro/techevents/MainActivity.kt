@@ -4,16 +4,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -21,14 +24,15 @@ import androidx.navigation.toRoute
 import jesscafezeiro.techevents.data.remote.network.ApiClient
 import jesscafezeiro.techevents.data.repository.EventRepositoryImpl
 import jesscafezeiro.techevents.presentation.EventListViewModel
+import jesscafezeiro.techevents.presentation.details.EventDetailScreen
+import jesscafezeiro.techevents.presentation.details.EventDetailsViewModel
 import jesscafezeiro.techevents.presentation.navigation.EventDetailRoute
-import jesscafezeiro.techevents.presentation.navigation.EventListRoutes
+import jesscafezeiro.techevents.presentation.navigation.EventListRoute
 import jesscafezeiro.techevents.presentation.ui.EventListScreen
 
 class MainActivity : ComponentActivity() {
 
-    // Injeção de dependência manual temporária (Débito Técnico para Hilt no futuro)
-    private val viewModel: EventListViewModel by viewModels {
+    private val eventListViewModel: EventListViewModel by viewModels {
         object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -56,20 +60,18 @@ class MainActivity : ComponentActivity() {
 
                         NavHost(
                             navController = navController,
-                            startDestination = EventListRoutes // A primeira tela a aparecer
+                            startDestination = EventListRoute
                         ) {
 
-                            // 3. Rota da Lista de Eventos
-                            composable<EventListRoutes> {
-                                // Os estados são coletados apenas quando esta rota está ativa
-                                val searchQuery by viewModel.searchQuery.collectAsState()
-                                val selectedType by viewModel.selectedType.collectAsState()
-                                val eventsPagingFlow = viewModel.eventsPagingFlow
+                            composable<EventListRoute> {
+                                val searchQuery by eventListViewModel.searchQuery.collectAsState()
+                                val selectedType by eventListViewModel.selectedType.collectAsState()
+                                val eventsPagingFlow = eventListViewModel.eventsPagingFlow
 
                                 Column(modifier = Modifier.fillMaxSize()) {
                                     OutlinedTextField(
                                         value = searchQuery,
-                                        onValueChange = { viewModel.onSearchQueryChanged(it) },
+                                        onValueChange = { eventListViewModel.onSearchQueryChanged(it) },
                                         label = { Text("Buscar eventos...") },
                                         singleLine = true,
                                         modifier = Modifier
@@ -88,27 +90,34 @@ class MainActivity : ComponentActivity() {
                                     EventListScreen(
                                         eventsFlow = eventsPagingFlow,
                                         selectedType = selectedType,
-                                        onTypeSelected = { viewModel.onTypeSelected(it) },
+                                        onTypeSelected = { eventListViewModel.onTypeSelected(it) },
                                         onEventClick = { eventId ->
-                                            navController.navigate(EventDetailRoute(eventId = eventId))
+                                            navController.navigate(EventDetailRoute(id = eventId))
                                         }
                                     )
                                 }
                             }
 
-                            // 5. Rota de Detalhes (Stub/Temporário para teste)
                             composable<EventDetailRoute> { backStackEntry ->
-                                val routeData = backStackEntry.toRoute<EventDetailRoute>()
+                                val route = backStackEntry.toRoute<EventDetailRoute>()
+                                val detailsViewModel: EventDetailsViewModel = viewModel(
+                                    factory = object : ViewModelProvider.Factory {
+                                        @Suppress("UNCHECKED_CAST")
+                                        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                                            val repository = EventRepositoryImpl(ApiClient.eventService)
+                                            return EventDetailsViewModel(repository, route.id) as T
+                                        }
+                                    }
+                                )
 
-                                Box(
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text(
-                                        text = "Chegamos na tela de detalhes!\nID do Evento: ${routeData.eventId}",
-                                        color = Color.White
-                                    )
-                                }
+                                val uiState by detailsViewModel.uiState.collectAsState()
+
+                                EventDetailScreen(
+                                    uiState = uiState,
+                                    onBackClick = {
+                                        navController.popBackStack()
+                                    }
+                                )
                             }
                         }
                     }

@@ -1,6 +1,6 @@
 package jesscafezeiro.techevents.data.repository
 
-import android.graphics.pdf.PdfDocument
+import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -10,7 +10,6 @@ import jesscafezeiro.techevents.data.remote.paging.EventPagingSource
 import jesscafezeiro.techevents.domain.model.Event
 import jesscafezeiro.techevents.domain.model.repository.EventRepository
 import kotlinx.coroutines.flow.Flow
-import retrofit2.http.Query
 
 class EventRepositoryImpl(
     private val eventApiService: EventApiService
@@ -37,6 +36,7 @@ class EventRepositoryImpl(
         return try {
             eventApiService.getEvent(id).toDomain()
         } catch (e: Exception) {
+            Log.e("TECH_EVENTS_DEBUG", "Erro ao buscar evento ID $id", e)
             null
         }
     }

@@ -4,10 +4,10 @@ import kotlinx.serialization.Serializable
 
 // Rota sem argumentos (tela inicial)
 @Serializable
-object EventListRoutes
+object EventListRoute
 
 // Rota com argumentos (tela de detalhes)
 @Serializable
 data class EventDetailRoute(
-    val eventId: String
+    val id: String
 )

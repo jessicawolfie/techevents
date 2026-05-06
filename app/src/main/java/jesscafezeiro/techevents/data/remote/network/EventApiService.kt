@@ -15,7 +15,12 @@ interface EventApiService {
         @Query("limit") limit: Int? = null
     ): List<EventDto>
 
-    // Endpoint para buscar um evento específico por ID
+    /**
+     * Busca os detalhes completos de um evento específico.
+     * @param id O identificador único do evento (UUID ou Hash).
+     * @return O objeto [EventDto] serializado a partir do JSON da API.
+     * @throws retrofit2.HttpException se o servidor retornar erro (ex: 404, 500)
+     */
     @GET("events/{id}")
     suspend fun getEvent(@Path("id") id: String): EventDto
 }
