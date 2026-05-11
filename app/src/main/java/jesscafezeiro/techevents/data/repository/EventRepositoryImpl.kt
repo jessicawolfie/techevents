@@ -40,4 +40,16 @@ class EventRepositoryImpl(
             null
         }
     }
+
+    override suspend fun getEventRecommendations(eventId: String): List<Event> {
+        return try {
+            // Chamada para novo endpoint da API em Python
+            val response = eventApiService.getEventRecommendations(eventId)
+            // Mapeia a lista de DTOs para o modelo
+            response.map { it.toDomain() }
+        } catch (e: Exception) {
+            Log.e("TECH_EVENTS_DEBUG", "Erro ao buscar recomendações para o evento $eventId", e)
+            emptyList()
+        }
+    }
 }

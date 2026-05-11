@@ -23,4 +23,10 @@ interface EventApiService {
      */
     @GET("events/{id}")
     suspend fun getEvent(@Path("id") id: String): EventDto
+
+    // Endpoint de Machine Learning
+    @GET("events/{id}/recommendations")
+    suspend fun getEventRecommendations(
+        @Path("id") eventId: String
+    ): List<EventDto>
 }

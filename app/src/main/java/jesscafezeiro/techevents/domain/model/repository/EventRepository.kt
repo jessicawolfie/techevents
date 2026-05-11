@@ -7,4 +7,6 @@ import kotlinx.coroutines.flow.Flow
 interface EventRepository {
     fun getEvents(query: String, tipo: String?): Flow<PagingData<Event>>
     suspend fun getEvent(id: String): Event?
+
+    suspend fun getEventRecommendations(eventId: String): List<Event>
 }
