@@ -116,6 +116,9 @@ class MainActivity : ComponentActivity() {
                                     uiState = uiState,
                                     onBackClick = {
                                         navController.popBackStack()
+                                    },
+                                    onRecommendationClick = { eventId ->
+                                        navController.navigate(EventDetailRoute(id = eventId))
                                     }
                                 )
                             }

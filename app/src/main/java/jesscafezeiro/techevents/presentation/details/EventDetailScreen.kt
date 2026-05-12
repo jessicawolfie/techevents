@@ -2,6 +2,8 @@ package jesscafezeiro.techevents.presentation.details
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -15,12 +17,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import jesscafezeiro.techevents.presentation.ui.EventCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EventDetailScreen(
     uiState: EventDetailsUiState,
     onBackClick: () -> Unit,
+    onRecommendationClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -69,6 +73,7 @@ fun EventDetailScreen(
                 }
                 is EventDetailsUiState.Success -> {
                     val event = uiState.event
+                    val recommendations = uiState.recommendations
 
                     Column(
                         modifier = Modifier
@@ -90,7 +95,6 @@ fun EventDetailScreen(
                                 .horizontalScroll(rememberScrollState()),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            // Chip principal (Online/Presencial) com cor de destaque
                             AssistChip(
                                 onClick = { },
                                 label = { Text(if (event.isOnline) "Transmissão Online" else "Evento Presencial") },
@@ -101,7 +105,6 @@ fun EventDetailScreen(
                                 border = null
                             )
 
-                            // Gera os outros chips dinamicamente a partir da lista de tags
                             event.tags.forEach { tag ->
                                 AssistChip(
                                     onClick = { },
@@ -110,7 +113,7 @@ fun EventDetailScreen(
                             }
                         }
 
-                        // Seção de Informações Técnicas (Data, Hora e Local)
+                        // Seção de Informações Técnicas
                         Card(
                             colors = CardDefaults.cardColors(
                                 containerColor = MaterialTheme.colorScheme.surfaceVariant
@@ -121,7 +124,6 @@ fun EventDetailScreen(
                                 modifier = Modifier.padding(16.dp),
                                 verticalArrangement = Arrangement.spacedBy(12.dp)
                             ) {
-                                // Linha de Data e Hora combinadas
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Icon(
                                         imageVector = Icons.Default.DateRange,
@@ -136,7 +138,6 @@ fun EventDetailScreen(
                                     )
                                 }
 
-                                // Linha de Localização exata
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Icon(
                                         imageVector = Icons.Default.LocationOn,
@@ -154,7 +155,6 @@ fun EventDetailScreen(
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        // Descrição do Evento
                         Text(
                             text = "Sobre o Evento",
                             style = MaterialTheme.typography.titleLarge,
@@ -170,7 +170,6 @@ fun EventDetailScreen(
 
                         Spacer(modifier = Modifier.height(24.dp))
 
-                        // Botão de Call to Action
                         Button(
                             onClick = { /* Ação futura */ },
                             modifier = Modifier
@@ -180,7 +179,37 @@ fun EventDetailScreen(
                             Text("Garantir Vaga", style = MaterialTheme.typography.titleMedium)
                         }
 
-                        Spacer(modifier = Modifier.height(32.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // SEÇÃO DE RECOMENDAÇÕES DA IA
+                        if (recommendations.isNotEmpty()) {
+                            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            Text(
+                                text = "Você também pode gostar de:",
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+
+                            LazyRow(
+                                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                                contentPadding = PaddingValues(bottom = 32.dp)
+                            ) {
+                                items(recommendations) { recommendedEvent ->
+                                    EventCard(
+                                        event = recommendedEvent,
+                                        onClick = { onRecommendationClick(recommendedEvent.id) },
+                                        modifier = Modifier.width(280.dp)
+                                    )
+                                }
+                            }
+                        } else {
+                            // Spacer apenas para dar uma margem final caso não haja recomendações
+                            Spacer(modifier = Modifier.height(32.dp))
+                        }
                     }
                 }
             }
