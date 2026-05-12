@@ -29,6 +29,7 @@ import jesscafezeiro.techevents.presentation.details.EventDetailsViewModel
 import jesscafezeiro.techevents.presentation.navigation.EventDetailRoute
 import jesscafezeiro.techevents.presentation.navigation.EventListRoute
 import jesscafezeiro.techevents.presentation.ui.EventListScreen
+import jesscafezeiro.techevents.presentation.splash.SplashScreen
 
 class MainActivity : ComponentActivity() {
 
@@ -60,8 +61,17 @@ class MainActivity : ComponentActivity() {
 
                         NavHost(
                             navController = navController,
-                            startDestination = EventListRoute
+                            startDestination = "splash"
                         ) {
+                            composable("splash") {
+                                SplashScreen(
+                                    onTimeout = {
+                                        navController.navigate(EventListRoute) {
+                                            popUpTo("splash") { inclusive = true }
+                                        }
+                                    }
+                                )
+                            }
 
                             composable<EventListRoute> {
                                 val searchQuery by eventListViewModel.searchQuery.collectAsState()
